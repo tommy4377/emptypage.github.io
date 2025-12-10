@@ -1,384 +1,343 @@
-/* Reset e impostazioni di base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #fdf6e3; 
-    color: #5c3d2e;
-    transition: background 0.3s, color 0.3s;
-    overflow: hidden;
-    height: 100vh;
-    position: relative;
-    /* Scrollbar per Firefox */
-    scrollbar-width: thin;
-    scrollbar-color: #5c3d2e #fdf6e3;
-  }
-  
-  /* Modalità dark */
-  .dark-mode {
-    background-color: #2d2d2d;
-    color: #f8f8f2;
-    /* Scrollbar in dark mode per Firefox */
-    scrollbar-color: #f8f8f2 #2d2d2d;
-  }
-  
-  /* Top Controls: titolo e pulsanti guida e menu */
-  #topControls {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1100;
-    background: transparent;
-  }
-  
-  #pageTitle {
-    font-size: 24px;
-    font-weight: bold;
-    transition: opacity 0.5s;
-  }
-  
-  .control-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  #guideBtn, #menuBtn {
-    background: #5c3d2e;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.3s;
-  }
-  
-  #guideBtn:hover, #menuBtn:hover {
-    background: #7a5342;
-    transform: scale(1.05);
-  }
-  
-  #menuBtn img {
-    width: 24px;
-    height: 24px;
-  }
-  
-  /* Area di scrittura */
-  textarea {
-    width: 100%;
-    height: 100vh;
-    border: none;
-    padding: 60px 20px 20px 20px;
-    background: inherit;
-    color: inherit;
-    font-size: 18px;
-    resize: none;
-    outline: none;
-    overflow-y: auto;
-    transition: background 0.3s, color 0.3s;
-  }
-  
-  /* Box di conteggio */
-  .counter {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #5c3d2e;
-    padding: 8px 12px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    z-index: 1100;
-    transition: background 0.3s, color 0.3s;
-  }
-  
-  .dark-mode .counter {
-    background: rgba(0, 0, 0, 0.7);
-    color: #f8f8f2;
-  }
-  
-  /* Dropdown Menu migliorato */
-  #dropdownMenu {
-    position: fixed;
-    top: 60px;
-    right: 20px;
-    background: #fdf6e3;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    display: none;
-    z-index: 1000;
-    animation: fadeIn 0.3s;
-  }
-  
-  .dark-mode #dropdownMenu {
-    background: #444;
-    border-color: #666;
-    color: #f8f8f2;
-  }
-  
-  #dropdownMenu.active {
-    display: block;
-  }
-  
-  #dropdownMenu ul {
-    list-style: none;
-    margin: 0;
-    padding: 10px;
-  }
-  
-  #dropdownMenu ul li {
-    margin: 5px 0;
-  }
-  
-  #dropdownMenu ul li button {
-    width: 100%;
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-    transition: background 0.3s, color 0.3s;
-    color: inherit !important;
-    text-decoration: none !important;
+/* Variabili CSS */
+:root {
+    --bg-color: #fdf6e3;
+    --text-color: #5c3d2e;
+    --accent-color: #5c3d2e;
+    --hover-color: #7a5342;
+    --modal-bg: #fdf6e3;
+    --border-color: #ccc;
+    --shadow-color: rgba(0,0,0,0.2);
+    --counter-bg: rgba(255, 255, 255, 0.9);
+    --danger-color: #d9534f;
+    --overlay-color: rgba(0,0,0,0.5);
+    --success-color: #5cb85c;
 }
 
-  
-  #dropdownMenu ul li button:hover {
-    background: rgba(0,0,0,0.1);
-  }
-  
-  .dark-mode #dropdownMenu ul li button:hover {
-    background: rgba(255,255,255,0.1);
-  }
-  
-  /* Email Popover */
-  #emailPopover {
-    position: fixed;
-    top: 60px;
-    right: 20px;
-    background: #fdf6e3;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    display: none;
-    z-index: 1000;
-    animation: fadeIn 0.3s;
-  }
-  
-  .dark-mode #emailPopover {
-    background: #444;
-    border-color: #666;
-    color: #f8f8f2;
-  }
-  
-  #emailPopover .email-container {
-    padding: 15px;
+.dark-mode {
+    --bg-color: #2d2d2d;
+    --text-color: #f8f8f2;
+    --accent-color: #f8f8f2;
+    --hover-color: #ccc;
+    --modal-bg: #444;
+    --border-color: #666;
+    --shadow-color: rgba(0,0,0,0.5);
+    --counter-bg: rgba(0, 0, 0, 0.7);
+    --danger-color: #ff6b6b;
+    --overlay-color: rgba(0,0,0,0.7);
+    --success-color: #6bd16b;
+}
+
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    transition: background-color 0.5s ease, color 0.5s ease;
+    overflow: hidden;
+    height: 100dvh; 
     position: relative;
-  }
-  
-  #emailPopover .close-popover {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: inherit;
-  }
-  
-  #emailPopover h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
-  
-  #emailPopover form label {
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-color); border-radius: 99px; }
+::-webkit-scrollbar-thumb { background-color: var(--accent-color); border-radius: 99px; border: 1px solid var(--bg-color); }
+
+/* --- UI Principale --- */
+
+#topControls {
+    position: fixed; top: 0; left: 0; width: 100%;
+    padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 1100;
+    pointer-events: none;
+}
+
+#pageTitle, .control-buttons { pointer-events: auto; }
+
+#pageTitle {
+    font-size: 24px; font-weight: bold;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%;
+    color: var(--text-color);
+}
+
+.control-buttons { display: flex; gap: 10px; }
+
+#guideBtn, #menuBtn {
+    background: var(--accent-color);
+    border: none; border-radius: 50%;
+    width: 40px; height: 40px;
+    color: var(--bg-color);
+    font-size: 20px; cursor: pointer;
+    transition: 0.3s;
+    display: flex; align-items: center; justify-content: center;
+}
+.dark-mode #guideBtn, .dark-mode #menuBtn { background: #555; color: #fff; }
+#guideBtn:hover, #menuBtn:hover { background: var(--hover-color); transform: scale(1.05); }
+#menuBtn img { width: 24px; height: 24px; }
+
+textarea {
+    width: 100%; height: 100dvh;
+    border: none; padding: 60px 20px 20px 20px;
+    background-color: transparent;
+    color: var(--text-color);
+    font-size: 18px; resize: none; outline: none;
+    overflow-y: auto;
+    transition: color 0.5s ease;
+}
+
+/* Box Conteggio */
+.counter {
+    position: fixed; bottom: 20px; right: 20px;
+    font-size: 14px;
+    background: var(--counter-bg);
+    color: var(--text-color);
+    padding: 8px 12px; border-radius: 8px;
+    box-shadow: 0 2px 6px var(--shadow-color);
+    z-index: 1100;
+}
+
+/* --- MENU DROPDOWN --- */
+#dropdownMenu {
+    position: fixed; top: 60px; right: 20px;
+    background: var(--modal-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    display: none; z-index: 1000;
+    animation: fadeIn 0.3s;
+    min-width: 200px;
+}
+#dropdownMenu.active { display: block; }
+#dropdownMenu ul { list-style: none; padding: 10px; }
+#dropdownMenu ul li { margin: 5px 0; }
+.menu-divider { border: 0; border-top: 1px solid var(--border-color); margin: 5px 0; }
+
+#dropdownMenu button {
+    width: 100%; background: none; border: none;
+    text-align: left; padding: 8px 12px;
+    cursor: pointer; font-size: 16px; border-radius: 4px;
+    color: var(--text-color);
+    display: flex; justify-content: space-between; align-items: center;
+}
+#dropdownMenu button:hover { background: rgba(128,128,128,0.1); }
+
+/* Shortcut hint nel menu */
+.shortcut-hint {
+    font-size: 11px;
+    opacity: 0.5;
+    margin-left: 10px;
+    font-family: monospace;
+}
+
+/* --- MODALI --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--overlay-color);
+    z-index: 2000; display: none; opacity: 0;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(2px);
+}
+.modal-overlay.show { display: block; opacity: 1; }
+
+.custom-modal {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--modal-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 20px;
+    width: 300px;
+    box-shadow: 0 10px 25px var(--shadow-color);
+    z-index: 2100; display: none;
+    color: var(--text-color);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.custom-modal.show { display: block; }
+.custom-modal h3 { margin-bottom: 15px; font-size: 18px; text-align: center; }
+.custom-modal p { font-size: 14px; margin-bottom: 20px; text-align: center; }
+
+.custom-modal input[type="text"],
+.custom-modal input[type="email"] {
+    width: 100%; padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px; margin-bottom: 15px;
+    background: transparent; color: var(--text-color);
+    font-family: inherit;
+}
+
+.custom-modal label {
     display: block;
-    margin: 5px 0 2px;
-  }
-  
-  #emailPopover form input {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 8px;
-  }
-  
-  .dark-mode #emailPopover form input {
-    background: #333;
-    border-color: #555;
-    color: #f8f8f2;
-  }
-  
-  #emailPopover .popover-buttons {
-    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.modal-buttons { display: flex; gap: 10px; justify-content: space-between; }
+.vertical-buttons { flex-direction: column; gap: 8px; }
+
+.custom-modal button {
+    flex: 1; padding: 8px 12px; border: none; border-radius: 4px;
+    cursor: pointer; font-size: 14px; transition: opacity 0.2s, transform 0.1s;
+}
+.custom-modal button:hover { opacity: 0.8; }
+.custom-modal button:active { transform: scale(0.98); }
+
+.btn-confirm { background: var(--accent-color); color: var(--bg-color); }
+.dark-mode .btn-confirm { background: #555; color: #fff; }
+.btn-secondary { background: transparent; border: 1px solid var(--border-color) !important; color: var(--text-color); }
+.btn-danger { background: var(--danger-color); color: #fff; }
+.btn-cancel { background: transparent; color: var(--text-color); text-decoration: underline; }
+
+.close-popover {
+    position: absolute; top: 10px; right: 15px;
+    background: none; border: none; font-size: 20px;
+    cursor: pointer; color: var(--text-color);
+    width: auto !important;
+    flex: none !important;
+}
+.close-popover:hover { opacity: 0.7; }
+
+/* --- FIND & REPLACE MODAL --- */
+.find-replace-modal {
+    width: 350px;
+}
+
+.find-replace-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.find-replace-modal .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.find-replace-modal .input-group label {
+    margin-bottom: 0;
+}
+
+.find-replace-modal .input-group input {
+    margin-bottom: 0;
+}
+
+.find-options {
+    display: flex;
+    gap: 15px;
+    margin: 5px 0;
+}
+
+.checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+.find-results {
+    text-align: center;
+    font-size: 13px;
+    min-height: 20px;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.find-results.found { color: var(--success-color); opacity: 1; }
+.find-results.not-found { color: var(--danger-color); opacity: 1; }
+
+.find-replace-buttons {
     display: flex;
     gap: 10px;
-  }
-  
-  #emailPopover .popover-buttons button {
+}
+
+.find-replace-buttons button {
     flex: 1;
-    padding: 8px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  #emailPopover .popover-buttons button[type="submit"] {
-    background: #5c3d2e;
-    color: #fdf6e3;
-  }
-  
-  #emailPopover .popover-buttons button:hover {
-    opacity: 0.8;
-  }
-  
-  /* Modal Guida */
-  .modal {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    position: fixed;
-    z-index: 3000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-  }
-  
-  .modal.show {
-    display: block;
-    opacity: 1;
-  }
-  
-  .modal-content {
-    background-color: #fdf6e3;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 500px;
-    position: relative;
-    animation: fadeIn 0.3s;
-  }
-  
-  .dark-mode .modal-content {
-    background-color: #444;
-    color: #f8f8f2;
-    border-color: #666;
-  }
-  
-  /* Bottone di chiusura per la modal */
-  .close-modal {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: #5c3d2e;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 20px;
-    line-height: 30px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .close-modal:hover {
-    background: #7a5342;
-  }
-  
-  /* Rimuovo i puntini dagli elenchi della guida */
-  .modal-content ul {
+    padding: 10px;
+}
+
+/* GUIDE MODAL */
+.guide-modal {
+    display: none; position: fixed; z-index: 3000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: var(--overlay-color);
+    opacity: 0; transition: opacity 0.3s;
+}
+.guide-modal.show { display: block; opacity: 1; }
+.guide-content {
+    background-color: var(--modal-bg);
+    margin: 10% auto; padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px; width: 80%; max-width: 500px;
+    position: relative; color: var(--text-color);
+}
+.guide-content h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+.close-guide {
+    position: absolute; top: -10px; right: -10px;
+    background: var(--accent-color); color: var(--bg-color);
+    border: none; border-radius: 50%;
+    width: 30px; height: 30px; font-size: 20px; cursor: pointer;
+}
+.dark-mode .close-guide { background: #555; color: #fff; }
+
+/* Shortcuts list in guide */
+.shortcuts-list {
     list-style: none;
     padding-left: 0;
-  }
-  
-  /* Popup Toast */
-  .toast {
-    position: fixed;
-    top: 50%;
-    left: 50%;
+}
+.shortcuts-list li {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+kbd {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-family: monospace;
+    box-shadow: 0 1px 2px var(--shadow-color);
+}
+.dark-mode kbd {
+    background: #333;
+    border-color: #555;
+}
+
+/* Toast */
+.toast {
+    position: fixed; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.8);
-    color: #fff;
-    padding: 15px 30px;
-    border-radius: 8px;
-    font-size: 18px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease-out;
-    z-index: 2000;
-  }
-  .toast.show {
-    opacity: 1;
-  }
-  
-  /* Custom Scrollbar per Webkit – dimensione ridotta e forma tonda */
-  ::-webkit-scrollbar {
-    width: 8px !important;
-  }
-  ::-webkit-scrollbar-track {
-    background: #fdf6e3 !important;
-    border-radius: 9999px !important;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: #5c3d2e !important;
-    border-radius: 9999px !important;
-    border: 1px solid #fdf6e3 !important;
-  }
-  .dark-mode ::-webkit-scrollbar-track {
-    background: #2d2d2d !important;
-  }
-  .dark-mode ::-webkit-scrollbar-thumb {
-    background-color: #f8f8f2 !important;
-    border: 1px solid #2d2d2d !important;
-    border-radius: 9999px !important;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 600px) {
-    #pageTitle {
-      font-size: 20px;
-    }
-    textarea {
-      font-size: 16px;
-      padding: 50px 15px 15px 15px;
-    }
-    .counter {
-      font-size: 12px;
-      padding: 6px 10px;
-    }
-    #dropdownMenu, #emailPopover {
-      right: 10px;
-      top: 50px;
-    }
-    .control-buttons button {
-      width: 35px;
-      height: 35px;
-    }
-    .modal-content {
-      width: 90%;
-      margin: 20% auto;
-    }
-  }
-  
+    background: rgba(0,0,0,0.8); color: #fff;
+    padding: 15px 30px; border-radius: 8px;
+    font-size: 18px; opacity: 0; pointer-events: none;
+    transition: opacity 0.5s; z-index: 4000;
+}
+.toast.show { opacity: 1; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { from { transform: translate(-50%, -60%) scale(0.9); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+@media (max-width: 600px) {
+    #pageTitle { font-size: 20px; }
+    textarea { font-size: 16px; padding-top: 50px; }
+    .custom-modal { width: 90%; }
+    .find-replace-modal { width: 90%; }
+    .shortcut-hint { display: none; }
+}
