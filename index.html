@@ -4,71 +4,148 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Empty Page</title>
-  <!-- Favicon -->
+  
+  <!-- Protezione Estensioni -->
+  <meta name="darkreader-lock">
+  <meta name="color-scheme" content="light dark">
+  
+  <!-- Libreria PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <link rel="icon" type="image/png" href="icon.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Top Controls: contiene il titolo dinamico e i pulsanti guida e menu -->
+  <!-- Top Controls -->
   <div id="topControls">
     <div id="pageTitle">Empty Page</div>
     <div class="control-buttons">
-      <button id="guideBtn" class="guide-btn">?</button>
-      <button id="menuBtn"><img src="icon.png" alt="Menu"></button>
+      <button id="guideBtn" class="guide-btn" aria-label="Open Guide">?</button>
+      <button id="menuBtn" aria-label="Open Menu"><img src="icon.png" alt="Menu Icon"></button>
     </div>
   </div>
 
-  <!-- Area di scrittura -->
+  <!-- Writing Area -->
   <textarea id="textArea" placeholder="Start writing here..."></textarea>
 
-  <!-- Box di conteggio -->
-  <div class="counter" id="counter">0 words - 0 characters</div>
+  <!-- Info Box: Solo Conteggio -->
+  <div class="counter" id="counter">
+    <span id="stats">0 words - 0 characters</span>
+  </div>
 
-  <!-- Dropdown Menu migliorato -->
+  <!-- Dropdown Menu -->
   <div id="dropdownMenu">
     <ul>
+      <li><button id="openRenameModal">Rename Page</button></li>
+      <li><button id="openFindReplace">Find & Replace <span class="shortcut-hint">Ctrl+F</span></button></li>
+      <li><hr class="menu-divider"></li>
       <li><button id="toggleDark">Toggle Dark Mode</button></li>
-      <li><button id="saveDraft">Save Draft</button></li>
-      <li><button id="deleteDraft">Delete Draft</button></li>
+      <li><hr class="menu-divider"></li>
+      <li><button id="saveDraft">Save Draft <span class="shortcut-hint">Ctrl+S</span></button></li>
+      <li><button id="openDeleteModal">Delete Draft</button></li>
+      <li><button id="downloadPdf">Download PDF</button></li>
       <li><button id="downloadTxt">Download .txt</button></li>
       <li><button id="openEmailPopover">Send via Email</button></li>
     </ul>
   </div>
 
-  <!-- Email Popover -->
-  <div id="emailPopover">
-    <div class="email-container">
-      <span class="close-popover" id="closeEmailPopover">&times;</span>
-      <h3>Send via Email</h3>
-      <form id="emailForm">
-        <label for="recipient">Recipient:</label>
-        <input type="email" id="recipient" required>
-        <label for="subject">Subject:</label>
-        <input type="text" id="subject" required>
-        <div class="popover-buttons">
-          <button type="button" id="cancelEmailPopover">Cancel</button>
-          <button type="submit">Send</button>
-        </div>
-      </form>
+  <!-- Overlay Sfondo -->
+  <div id="modalOverlay" class="modal-overlay"></div>
+
+  <!-- RENAME MODAL -->
+  <div id="renameModal" class="custom-modal">
+    <h3>Rename Page</h3>
+    <input type="text" id="renameInput" placeholder="Enter new title...">
+    <div class="modal-buttons">
+      <button id="cancelRename" class="btn-cancel">Cancel</button>
+      <button id="confirmRename" class="btn-confirm">Save</button>
     </div>
   </div>
 
-  <!-- Modal Guida -->
-  <div id="guideModal" class="modal">
-    <div class="modal-content">
-      <button class="close-modal">&times;</button>
+  <!-- DELETE MODAL -->
+  <div id="deleteModal" class="custom-modal">
+    <h3>Delete Draft?</h3>
+    <p>Are you sure you want to delete everything?</p>
+    <div class="modal-buttons">
+      <button id="cancelDelete" class="btn-cancel">Cancel</button>
+      <button id="confirmDelete" class="btn-danger">Delete</button>
+    </div>
+  </div>
+
+  <!-- FIND & REPLACE MODAL -->
+  <div id="findReplaceModal" class="custom-modal find-replace-modal">
+    <button class="close-popover" id="closeFindReplace">&times;</button>
+    <h3>Find & Replace</h3>
+    
+    <div class="find-replace-content">
+      <div class="input-group">
+        <label for="findInput">Find:</label>
+        <input type="text" id="findInput" placeholder="Search text...">
+      </div>
+      
+      <div class="input-group">
+        <label for="replaceInput">Replace with:</label>
+        <input type="text" id="replaceInput" placeholder="Replace text...">
+      </div>
+      
+      <div class="find-options">
+        <label class="checkbox-label">
+          <input type="checkbox" id="caseSensitive">
+          Case sensitive
+        </label>
+      </div>
+      
+      <div class="find-results" id="findResults"></div>
+      
+      <div class="find-replace-buttons">
+        <button id="findPrevBtn" class="btn-secondary" title="Previous (Shift+Enter)">◀ Prev</button>
+        <button id="findNextBtn" class="btn-secondary" title="Next (Enter)">Next ▶</button>
+      </div>
+      
+      <div class="find-replace-buttons">
+        <button id="replaceBtn" class="btn-confirm">Replace</button>
+        <button id="replaceAllBtn" class="btn-confirm">Replace All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL POPOVER -->
+  <div id="emailPopover" class="custom-modal">
+    <button class="close-popover" id="closeEmailPopover">&times;</button>
+    <h3>Send via Email</h3>
+    <form id="emailForm">
+      <label for="recipient">Recipient:</label>
+      <input type="email" id="recipient">
+      <label for="subject">Subject:</label>
+      <input type="text" id="subject">
+      <div class="modal-buttons vertical-buttons">
+        <button type="submit" class="btn-confirm">Open Mail Client</button>
+        <button type="button" id="copyTextBtn" class="btn-secondary">Copy Text</button> 
+      </div>
+    </form>
+  </div>
+
+  <!-- GUIDE MODAL -->
+  <div id="guideModal" class="guide-modal">
+    <div class="guide-content">
+      <button class="close-guide">&times;</button>
       <h3>Guide</h3>
       <p>Welcome to tommy437's website!</p>
       <ul>
-        <li>Write in the text field: the word and character count (excluding spaces) updates in real-time.</li>
+        <li>Write in the text field: the word and character count updates in real-time.</li>
         <li>Type <strong>"dark"</strong> or <strong>"light"</strong> on a new line and press enter to change the site's mode.</li>
         <li>The first non-empty line becomes the page title.</li>
-        <li>Use the menu to save the draft, delete it, download it, or send it via email.</li>
+      </ul>
+      <h4>Keyboard Shortcuts</h4>
+      <ul class="shortcuts-list">
+        <li><kbd>Ctrl</kbd> + <kbd>S</kbd> — Save Draft</li>
+        <li><kbd>Ctrl</kbd> + <kbd>F</kbd> — Find & Replace</li>
+        <li><kbd>Escape</kbd> — Close modals/menu</li>
       </ul>
     </div>
   </div>
 
-  <!-- Popup Toast per notifiche -->
+  <!-- Toast Popup -->
   <div id="toast" class="toast"></div>
 
   <script src="script.js"></script>
